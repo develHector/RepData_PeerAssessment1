@@ -138,5 +138,5 @@ xyplot( steps ~ interval | weekend, data=MeanStepsPerInterval, type="l", layout 
 ```
 
 ##Thanks guys!##
-
+Good luck with yours
 

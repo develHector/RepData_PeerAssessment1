@@ -202,5 +202,5 @@ xyplot( steps ~ interval | weekend, data=MeanStepsPerInterval, type="l", layout 
 <img src="figure/NewPlotPerWeekday-1.png" title="plot of chunk NewPlotPerWeekday" alt="plot of chunk NewPlotPerWeekday" style="display: block; margin: auto;" />
 
 ##Thanks guys!##
-
+Good luck with yours
 
