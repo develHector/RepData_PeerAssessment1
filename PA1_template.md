@@ -28,7 +28,8 @@ RawData <- read.csv( FileCon, header=TRUE, nrows=17568 );
 Calculate the total number of steps taken per day  (I'll remove intervals without data)
 
 ```r
-StepsPerDay <- with( RawData, tapply( steps, date, sum, na.rm = TRUE ) )  ; 
+# Yo en el trabajo puse el na.rm=TRUE, cosa obviamente erronea pues considerü¾Œ¶˜¼ los NA como ceros y engordü¾Œ¶˜¼ la cola izquierda, era na.rm=FALSE para no considerarlos!
+StepsPerDay <- with( RawData, tapply( steps, date, sum, na.rm=FALSE ) )  ; 
 ```
 
 Make a histogram of the total number of steps taken each day
@@ -43,19 +44,20 @@ histogram( StepsPerDay ) ;
 Calculate and report the mean and median of the total number of steps taken per day  
 
 ```r
-mean( StepsPerDay )
+# le tengo que poner el na.rm si no sale NA como resultado, estü¾Œ–”¼ raro ese parü¾Œ–”¼metro
+mean( StepsPerDay, na.rm=TRUE )
 ```
 
 ```
-## [1] 9354.23
+## [1] 10766.19
 ```
 
 ```r
-median( StepsPerDay )
+median( StepsPerDay, na.rm=TRUE )
 ```
 
 ```
-## [1] 10395
+## [1] 10765
 ```
 
 ###Average daily activity pattern###
@@ -64,7 +66,8 @@ Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and 
 
 ```r
 # This time I'll use the base::aggregate method instead of tapply, just for fun
-MeanStepsPerInterval <- aggregate( steps ~ interval, data=RawData, FUN=mean, na.rm = TRUE ) ;
+# Asumo que aquü¾™†”¼ tambiü¾Ž–”¼n era na.rm=FALSE para no considear los NA
+MeanStepsPerInterval <- aggregate( steps ~ interval, data=RawData, FUN=mean, na.rm=FALSE ) ;
 library( lattice ) ; 
 xyplot( steps ~ interval, data=MeanStepsPerInterval, type="l",
   ylab = "Avg num steps (across all days)",
@@ -155,19 +158,19 @@ Do these values differ from the estimates from the first part of the assignment?
 * Yes they do, as follows
 
 ```r
-mean(StepsPerDayComplete) - mean(StepsPerDay)
+mean(StepsPerDayComplete) - mean(StepsPerDay,na.rm=TRUE)
 ```
 
 ```
-## [1] 1411.41
+## [1] -0.549335
 ```
 
 ```r
-median(StepsPerDayComplete) - median(StepsPerDay)
+median(StepsPerDayComplete) - median(StepsPerDay,na.rm=TRUE)
 ```
 
 ```
-## [1] 367
+## [1] -3
 ```
 
 What is the NA impact on the estimates of the total daily number of steps?
@@ -179,6 +182,17 @@ What is the NA impact on the estimates of the total daily number of steps?
 4. Also, histogram presents more of a normal distribution.
 5. Median got closer to the mean, almost the same value.
 
+##Fe de ratas##
+
+After seeing the other assignments, and changing the na.rm stuff on calculations, too late of course!
+
+Do these values differ from the estimates from the first part of the assignment?
+
+* No, changes are minimal
+
+What is the NA impact on the estimates of the total daily number of steps?
+
+* Really minimal or nothing, the new mean are median are kept or almost the same
 
 #Activity diff between weekdays and weekends#
 
@@ -186,8 +200,8 @@ Create a new factor variable in the dataset indicating whether a given date is a
 
 ```r
 # For if your language is not English as mine, adjust it with Sys.setlocale("LC_ALL", "English")
-CompleteData$weekend =  factor( weekdays( as.Date( CompleteData$date ) ) %in% c("Saturday","Sunday"), 
-                                  labels = c("weekend", "weekday") ) ;
+CompleteData$weekend =  factor( weekdays( as.Date( CompleteData$date ) ) %in% c("Saturday","Sunday"),
+                                labels = c("weekend", "weekday") ) ;
 ```
 
 
@@ -203,4 +217,3 @@ xyplot( steps ~ interval | weekend, data=MeanStepsPerInterval, type="l", layout 
 
 ##Thanks guys!##
 Good luck with yours
-
